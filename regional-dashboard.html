@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Sales Overview - Iowa Liquor Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a>
+                </li>
+                <li class="dropdown active">
+                    <a href="regional-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-map-marked-alt"></i> Regional Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu show">
+                        <li><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
+                        <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
+                        <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
+                        <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="product-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-wine-bottle"></i> Product Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
+                        <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                        <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                        <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-title">
+                <h1>IOWA LIQUOR SALES BI DASHBOARD</h1>
+                <p>Regional Sales Overview</p>
+            </div>
+
+            <!-- Dashboard Filters -->
+            <div class="dashboard-filters">
+                <div class="filter-group">
+                    <label for="county-filter">Filter by County</label>
+                    <select id="county-filter">
+                        <option value="all">All Counties</option>
+                        <option value="polk">Polk</option>
+                        <option value="linn">Linn</option>
+                        <option value="scott">Scott</option>
+                        <option value="johnson">Johnson</option>
+                        <option value="black-hawk">Black Hawk</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="year-filter">Filter by Year</label>
+                    <select id="year-filter">
+                        <option value="all">All Years</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+                <button id="reset-filters" class="reset-btn">
+                    <i class="fas fa-undo"></i> Reset Filters
+                </button>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Chart 1: Monthly Sales Trend -->
+                <div class="dashboard-card">
+                    <div class="chart-number">1</div>
+                    <div class="chart-header">
+                        <h3>Monthly Sales Trend</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='monthly-sales.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="monthly-sales-chart">
+                        <!-- Student 1: Implement Monthly Sales Trend Line Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Monthly Sales Trend</p>
+                            <small>Student 1: Implement D3.js line chart showing sales over time</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Sales by County -->
+                <div class="dashboard-card">
+                    <div class="chart-number">2</div>
+                    <div class="chart-header">
+                        <h3>Sales by County</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='geographic.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="county-map-chart">
+                        <!-- Student 2: Implement Iowa County Map -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <p>Sales by County</p>
+                            <small>Student 2: Implement D3.js Iowa county map with hover tooltips</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Sales by City -->
+                <div class="dashboard-card">
+                    <div class="chart-number">3</div>
+                    <div class="chart-header">
+                        <h3>Sales by City</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='city-sales.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="city-sales-chart">
+                        <!-- Student 3: Implement City Sales Bar Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-city"></i>
+                            <p>Sales by City</p>
+                            <small>Student 3: Implement D3.js horizontal bar chart with click filtering</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 4: Top Stores by Sales -->
+                <div class="dashboard-card">
+                    <div class="chart-number">4</div>
+                    <div class="chart-header">
+                        <h3>Top Stores by Sales</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='top-stores.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="top-stores-chart">
+                        <!-- Student 4: Implement Top Stores Bar Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-store"></i>
+                            <p>Top Stores by Sales</p>
+                            <small>Student 4: Implement D3.js vertical bar chart showing store performance</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <p>Loading Iowa Liquor Sales data...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/data-loader.js"></script>
+    <script src="js/charts/monthly-trend.js"></script>
+    <script src="js/charts/county-map.js"></script>
+    <script src="js/charts/city-sales.js"></script>
+    <script src="js/charts/top-stores.js"></script>
+    <script src="js/regional-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product & Category Intelligence - Iowa Liquor Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a>
+                </li>
+                <li class="dropdown">
+                    <a href="regional-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-map-marked-alt"></i> Regional Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
+                        <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
+                        <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
+                        <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown active">
+                    <a href="product-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-wine-bottle"></i> Product Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu show">
+                        <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
+                        <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                        <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                        <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-title">
+                <h1>IOWA LIQUOR SALES BI DASHBOARD</h1>
+                <p>Product & Category Intelligence</p>
+            </div>
+
+            <!-- Dashboard Filters -->
+            <div class="dashboard-filters">
+                <div class="filter-group">
+                    <label for="month-filter">Filter by month</label>
+                    <select id="month-filter">
+                        <option value="all">All Months</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="category-filter">Category</label>
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="whiskey">Whiskey</option>
+                        <option value="vodka">Vodka</option>
+                        <option value="rum">Rum</option>
+                        <option value="gin">Gin</option>
+                        <option value="brandy">Brandy</option>
+                        <option value="liqueur">Liqueur</option>
+                    </select>
+                </div>
+                <button id="reset-filters" class="reset-btn">
+                    <i class="fas fa-undo"></i> Reset Filters
+                </button>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Chart 5: Top-Selling Categories -->
+                <div class="dashboard-card">
+                    <div class="chart-number">5</div>
+                    <div class="chart-header">
+                        <h3>Top-Selling Categories</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='categories.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="top-categories-chart">
+                        <!-- Student 5: Implement Top Categories Bar Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>Top-Selling Categories</p>
+                            <small>Student 5: Implement D3.js horizontal bar chart showing category revenue</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 6: Top-Selling Brands -->
+                <div class="dashboard-card">
+                    <div class="chart-number">6</div>
+                    <div class="chart-header">
+                        <h3>Top-Selling Brands or Products</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='brands.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="top-brands-chart">
+                        <!-- Student 6: Implement Top Brands Bar Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-tags"></i>
+                            <p>Top-Selling Brands or Products</p>
+                            <small>Student 6: Implement D3.js horizontal bar chart with product click filtering</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 7: Sales by Bottle Size -->
+                <div class="dashboard-card">
+                    <div class="chart-number">7</div>
+                    <div class="chart-header">
+                        <h3>Sales by Bottle Size</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='bottle-size.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="bottle-size-chart">
+                        <!-- Student 7: Implement Bottle Size Pie Chart -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-pie"></i>
+                            <p>Sales by Bottle Size</p>
+                            <small>Student 7: Implement D3.js pie/donut chart showing packaging preferences</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 8: Price vs Volume -->
+                <div class="dashboard-card">
+                    <div class="chart-number">8</div>
+                    <div class="chart-header">
+                        <h3>Price vs. Volume Sold</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='price-analysis.html'">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-body" id="price-volume-chart">
+                        <!-- Student 8: Implement Price vs Volume Scatter Plot -->
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-scatter"></i>
+                            <p>Price vs. Volume Sold</p>
+                            <small>Student 8: Implement D3.js scatter plot with hover tooltips</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <p>Loading Iowa Liquor Sales data...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/data-loader.js"></script>
+    <script src="js/charts/top-categories.js"></script>
+    <script src="js/charts/top-brands.js"></script>
+    <script src="js/charts/bottle-size.js"></script>
+    <script src="js/charts/price-volume.js"></script>
+    <script src="js/product-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottle Size Analysis - Iowa Liquor Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
+    </div>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a>
+        </li>
+        <li class="dropdown">
+            <a href="regional-dashboard.html" class="dropdown-toggle">
+                <i class="fas fa-map-marked-alt"></i> Regional Dashboard
+                <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
+                <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
+                <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
+                <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+            </ul>
+        </li>
+        <li class="dropdown active">
+            <a href="product-dashboard.html" class="dropdown-toggle">
+                <i class="fas fa-wine-bottle"></i> Product Dashboard
+                <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+            <ul class="dropdown-menu show">
+                <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
+                <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                <li class="active"><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1>Bottle Size Analysis</h1>
+                <p>Sales distribution by bottle size and packaging preferences</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="whiskey">Whiskey</option>
+                        <option value="vodka">Vodka</option>
+                        <option value="rum">Rum</option>
+                        <option value="gin">Gin</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="county-filter">County:</label>
+                    <select id="county-filter">
+                        <option value="all">All Counties</option>
+                        <option value="polk">Polk</option>
+                        <option value="linn">Linn</option>
+                        <option value="scott">Scott</option>
+                    </select>
+                </div>
+                <button id="reset-filters">Reset Filters</button>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Sales by Bottle Size</h3>
+                    <div class="chart-actions">
+                        <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                        <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+                <div class="chart-body" id="bottle-size-chart">
+                    <!-- Student 7: Add your D3.js bottle size chart here -->
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie"></i>
+                        <p>Bottle Size Distribution</p>
+                        <small>Student 7: Implement your D3.js pie/donut chart showing packaging preferences</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h4>Size Preferences</h4>
+                    <ul>
+                        <li>750ml bottles are most popular (45%)</li>
+                        <li>1L bottles preferred for value purchases</li>
+                        <li>Mini bottles popular for sampling</li>
+                        <li>Large formats preferred by restaurants</li>
+                    </ul>
+                </div>
+                <div class="analysis-card">
+                    <h4>Size Statistics</h4>
+                    <div class="stat-item">
+                        <span class="stat-label">Most Popular:</span>
+                        <span class="stat-value">750ml</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Revenue Share:</span>
+                        <span class="stat-value">45.3%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Size Varieties:</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script src="js/bottle-size.js"></script>
+</body>
+</html>

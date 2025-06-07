@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iowa Liquor Sales Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a>
+                </li>
+                <li class="dropdown">
+                    <a href="regional-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-map-marked-alt"></i> Regional Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
+                        <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
+                        <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
+                        <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="product-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-wine-bottle"></i> Product Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
+                        <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                        <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                        <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-title">
+                <h1>IOWA LIQUOR SALES BI DASHBOARD</h1>
+                <p>Business Intelligence Analytics for Iowa Liquor Sales Data</p>
+            </div>
+
+            <!-- Dashboard Overview Cards -->
+            <div class="overview-cards">
+                <!-- Regional Dashboard Card -->
+                <div class="overview-card" onclick="window.location.href='regional-dashboard.html'">
+                    <div class="card-icon regional">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h2>Regional Sales Overview</h2>
+                        <p>Analyze geographic performance across Iowa counties and cities. Explore sales trends, top-performing regions, and store performance with interactive maps and charts.</p>
+                        <div class="card-features">
+                            <span><i class="fas fa-chart-line"></i> Monthly Sales Trend</span>
+                            <span><i class="fas fa-map"></i> Sales by County Map</span>
+                            <span><i class="fas fa-city"></i> Sales by City</span>
+                            <span><i class="fas fa-store"></i> Top Stores Performance</span>
+                        </div>
+                        <div class="card-action">
+                            <span>Explore Regional Data</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Dashboard Card -->
+                <div class="overview-card" onclick="window.location.href='product-dashboard.html'">
+                    <div class="card-icon product">
+                        <i class="fas fa-wine-bottle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h2>Product & Category Intelligence</h2>
+                        <p>Discover product insights, category performance, and pricing analysis. Understand customer preferences and market trends across different liquor types.</p>
+                        <div class="card-features">
+                            <span><i class="fas fa-chart-bar"></i> Top Categories</span>
+                            <span><i class="fas fa-tags"></i> Top Brands</span>
+                            <span><i class="fas fa-chart-pie"></i> Bottle Size Analysis</span>
+                            <span><i class="fas fa-dollar-sign"></i> Price vs Volume</span>
+                        </div>
+                        <div class="card-action">
+                            <span>Explore Product Data</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Section -->
+            <div class="quick-stats">
+                <h3>Quick Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>Total Sales</h4>
+                            <p class="stat-value">$16.7M</p>
+                            <span class="stat-change positive">+12.5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-wine-bottle"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>Total Volume</h4>
+                            <p class="stat-value">1.2M Liters</p>
+                            <span class="stat-change positive">+8.3%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>Active Stores</h4>
+                            <p class="stat-value">1,841</p>
+                            <span class="stat-change neutral">+2.1%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>Counties</h4>
+                            <p class="stat-value">99</p>
+                            <span class="stat-change neutral">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
