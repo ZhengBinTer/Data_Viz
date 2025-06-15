@@ -12,39 +12,37 @@
     <div class="wrapper">
         <!-- Sidebar -->
         <div class="sidebar">
-    <div class="sidebar-header">
-        <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
-    </div>
-    <ul class="sidebar-menu">
-        <li>
-            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a>
-        </li>
-        <li class="dropdown active">
-            <a href="regional-dashboard.html" class="dropdown-toggle">
-                <i class="fas fa-map-marked-alt"></i> Regional Dashboard
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-            </a>
-            <ul class="dropdown-menu show">
-                <li class="active"><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
-                <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
-                <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
-                <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+            <div class="sidebar-header">
+                <h2><i class="fas fa-chart-line"></i> IOWA LIQUOR</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Home</a></li>
+                <li class="dropdown active">
+                    <a href="regional-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-map-marked-alt"></i> Regional Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu show">
+                        <li class="active"><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
+                        <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
+                        <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
+                        <li><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="product-dashboard.html" class="dropdown-toggle">
+                        <i class="fas fa-wine-bottle"></i> Product Dashboard
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
+                        <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                        <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                        <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li class="dropdown">
-            <a href="product-dashboard.html" class="dropdown-toggle">
-                <i class="fas fa-wine-bottle"></i> Product Dashboard
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
-                <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
-                <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
-                <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
+        </div>
 
         <!-- Main Content -->
         <div class="main-content">
@@ -56,21 +54,11 @@
             <!-- Filters -->
             <div class="filters-section">
                 <div class="filter-group">
-                    <label for="year-filter">Year:</label>
-                    <select id="year-filter">
-                        <option value="all">All Years</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                    </select>
-                </div>
-                <div class="filter-group">
                     <label for="county-filter">County:</label>
-                    <select id="county-filter">
+                    <select id="county-filter" class="filter">
                         <option value="all">All Counties</option>
                     </select>
                 </div>
-                <button id="reset-filters">Reset Filters</button>
             </div>
 
             <!-- Chart Container -->
@@ -83,7 +71,6 @@
                     </div>
                 </div>
                 <div class="chart-body" id="monthly-sales-chart">
-                    <!-- Student 1: Add your D3.js monthly sales trend chart here -->
                     <div class="chart-placeholder">
                         <i class="fas fa-chart-line"></i>
                         <p>Monthly Sales Trend Chart</p>
@@ -95,26 +82,22 @@
             <!-- Analysis Section -->
             <div class="analysis-grid">
                 <div class="analysis-card">
-                    <h4>Key Insights</h4>
-                    <ul>
-                        <li>Peak sales occur during holiday seasons</li>
-                        <li>Summer months show consistent growth</li>
-                        <li>Weekend sales are 40% higher than weekdays</li>
-                    </ul>
-                </div>
-                <div class="analysis-card">
                     <h4>Trend Statistics</h4>
                     <div class="stat-item">
                         <span class="stat-label">Growth Rate:</span>
-                        <span class="stat-value">+12.5%</span>
+                        <span class="stat-value">XXX%</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Best Month:</span>
-                        <span class="stat-value">December</span>
+                        <span class="stat-value">XXXX</span>
+                    </div>
+                        <div class="stat-item">
+                        <span class="stat-label">Best Catagory:</span>
+                        <span class="stat-value">XXXX</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Avg Monthly Sales:</span>
-                        <span class="stat-value">$1.4M</span>
+                        <span class="stat-value">$XXX</span>
                     </div>
                 </div>
             </div>

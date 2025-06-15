@@ -51,13 +51,18 @@
         <div class="main-content">
             <div class="page-header">
                 <h1>Geographic Distribution Analysis</h1>
-                <p>Sales performance across Iowa counties</p>
+                <p>Sales performance across Iowa counties with city-level insights</p>
             </div>
 
             <!-- Chart Container -->
             <div class="chart-container">
                 <div class="chart-header">
-                    <h3>Iowa Counties Sales Map</h3>
+                    <h3>Iowa Counties Sales Map with City Data</h3>
+                    <div class="chart-actions">
+                        <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                        <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
+                        <button class="btn-chart-action" title="Full Screen"><i class="fas fa-expand"></i></button>
+                    </div>
                 </div>
                 <div class="chart-body" id="geographic-chart">
                     <!-- Student 2: Add your D3.js geographic chart here -->
@@ -68,6 +73,52 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Analysis Section -->
+         <!--    <div class="analysis-grid">
+              <div class="analysis-card">
+                <h4>Regional Statistics</h4>
+                <div class="stat-item">
+                  <span class="stat-label">Top County:</span>
+                  <span class="stat-value">Polk County</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Active Counties:</span>
+                  <span class="stat-value">99</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Top City:</span>
+                  <span class="stat-value">Des Moines</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Avg Sales/County:</span>
+                  <span class="stat-value">$168K</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Counties with >$1M Sales:</span>
+                  <span class="stat-value">12</span>
+                </div>
+              </div>
+              <div class="analysis-card">
+                <h4>City Performance</h4>
+                <div class="stat-item">
+                  <span class="stat-label">Total Cities:</span>
+                  <span class="stat-value">947</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Cities >$100K Sales:</span>
+                  <span class="stat-value">156</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Avg Stores/City:</span>
+                  <span class="stat-value">1.9</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Metro vs Rural Split:</span>
+                  <span class="stat-value">65% / 35%</span>
+                </div>
+              </div>
+            </div> -->
         </div>
     </div>
 
