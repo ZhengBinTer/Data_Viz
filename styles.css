@@ -467,7 +467,7 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   position: relative;
-  min-height: 400px;
+  min-height: 800px; /* Increased from 600px */
   transition: var(--transition);
 }
 
@@ -536,7 +536,7 @@ body {
 
 .chart-body {
   padding: 20px;
-  height: 320px;
+  height: 700px; /* Increased from 500px */
   position: relative;
 }
 
@@ -642,12 +642,19 @@ body {
   flex-wrap: wrap;
 }
 
+/* Enhanced chart sizing for monthly sales */
 .chart-container {
   background-color: var(--card-color);
   border-radius: 15px;
   box-shadow: var(--shadow);
   overflow: hidden;
   margin-bottom: 30px;
+  min-height: 800px; /* Larger container */
+}
+
+.chart-container .chart-body {
+  height: 700px; /* Larger chart body */
+  padding: 30px; /* More padding */
 }
 
 .chart-grid {
@@ -789,5 +796,55 @@ body {
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Chart wrapper responsive styles */
+.chart-wrapper {
+  display: flex !important;
+  gap: 20px !important;
+  align-items: flex-start !important;
+}
+
+.chart-area {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+/* Larger legend styling */
+.legend-area {
+  min-width: 280px !important; /* Increased from 250px */
+}
+
+.legend-area .legend-item {
+  padding: 8px 0 !important; /* More padding for legend items */
+  font-size: 14px !important; /* Larger legend text */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    flex-direction: column !important;
+  }
+
+  .legend-area {
+    width: 100% !important;
+    max-width: 400px !important;
+  }
+
+  .legend-area > div {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .legend-area .legend-item {
+    flex: 0 0 calc(50% - 5px) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .legend-area .legend-item {
+    flex: 0 0 100% !important;
   }
 }
