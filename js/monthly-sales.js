@@ -1,15 +1,15 @@
 // Student 1: Monthly Sales Chart Implementation
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("Monthly Sales page loaded - Student 1 implement your chart here")
 
   // Load data
   const d3 = window.d3
   const container = d3.select("#monthly-sales-chart")
   container.select(".chart-placeholder").remove()
 
-  d3.csv("data/Cleaned_Liquor_Sales.csv")
+// Load the smaller dataset
+  d3.csv("data/small_dataset.csv")
     .then((data) => {
-      const parseDate = d3.timeParse("%m/%d/%Y")
+      const parseDate = d3.timeParse("%Y-%m-%d")  // <-- Updated parser
       const formatMonth = d3.timeFormat("%B")
 
       // Parse and clean data
@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .html(`
       <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
       <p><strong>Error loading dataset</strong></p>
-      <p>Please check that 'data/Cleaned_Liquor_Sales.csv' exists and is accessible.</p>
+      <p>Please check that 'data/smaller_dataset.csv' exists and is accessible.</p>
     `)
     })
 })

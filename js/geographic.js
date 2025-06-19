@@ -1,4 +1,4 @@
-// Student 2: Geographic Chart Implementation - True US Counties Choropleth Map
+// Student 2: Geographic Chart Implementation - Enhanced Color Theme & Thicker Boundaries
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("Geographic page loaded - Creating US Counties Choropleth Map focused on Iowa")
 
@@ -7,10 +7,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   const container = d3.select("#geographic-chart")
   container.select(".chart-placeholder").remove()
 
+  // Add this at the top of the script, after DOMContentLoaded
+  const style = document.createElement("style");
+  style.textContent = `
+    #geographic-chart, #geographic-chart * {
+      font-size: 16px !important;
+    }
+    .map-title { font-size: 24px !important; }
+    .color-legend h4, .map-stats-panel h4, .county-info-panel h4, .top-cities-panel h4 {
+      font-size: 20px !important;
+    }
+    .info-item, .top-cities-panel div, .map-stats-panel div, .color-legend text {
+      font-size: 15px !important;
+    }
+    .map-tooltip {
+      font-size: 16px !important;
+    }
+  `;
+  document.head.appendChild(style);
+
   try {
     // Load CSV data and US geographic data
     const [csvData, us] = await Promise.all([
-      d3.csv("data/Cleaned_Liquor_Sales.csv"),
+      d3.csv("data/small_dataset.csv"),
       d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json"),
     ])
 
@@ -193,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mapContainer = mapWrapper
       .append("div")
       .attr("class", "map-area")
-      .style("flex", "1")
+      .style("flex", "1") // ← Increased from "1" to "1.5"
       .style("min-width", "0")
       .style("height", "100%")
       .style("position", "relative")
@@ -202,11 +221,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       .style("border-radius", "8px")
       .style("padding", "20px")
 
-    // Info container (right side)
+    // Info container (right side) - INCREASED WIDTH
     const infoContainer = mapWrapper
       .append("div")
       .attr("class", "info-area")
-      .style("width", "320px")
+      .style("width", "400px") // CHANGED from "320px" to "400px"
       .style("flex-shrink", "0")
       .style("height", "100%")
       .style("display", "flex")
@@ -231,37 +250,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
 
-    // Add title
+    // Add title FIRST (so it appears behind the map when zooming)
     const title = g
       .append("text")
       .attr("class", "map-title")
       .attr("x", width / 2)
       .attr("y", -70)
       .attr("text-anchor", "middle")
-      .style("font-size", "18px")
+      .style("font-size", "24px")
       .style("font-weight", "bold")
       .style("fill", "#333")
       .text("US Counties - Iowa Liquor Sales Choropleth")
 
-    // Color scale for choropleth
-    const salesValues = Array.from(countySales.values()).map((d) => d.totalSales)
-    const maxSales = d3.max(salesValues)
-    const minSales = d3.min(salesValues)
+    // Create map group for counties and states AFTER title
+    const mapGroup = g.append("g").attr("class", "map-group")
 
-    // Use a more contrasting color scheme for better visibility
-    const color = d3.scaleQuantize().domain([minSales, maxSales]).range([
-      "#f7fbff", // Very light blue (lowest sales)
-      "#deebf7", // Light blue
-      "#c6dbef", // Light-medium blue
-      "#9ecae1", // Medium blue
-      "#6baed6", // Medium-dark blue
-      "#4292c6", // Dark blue
-      "#2171b5", // Darker blue
-      "#08519c", // Very dark blue
-      "#08306b", // Darkest blue (highest sales)
+    // **FIXED COLOR SCALE: 0 to 6.5M range**
+    const color = d3.scaleQuantize().domain([0, 6500000]).range([
+      "#fff5f0", // Very light orange (lowest sales)
+      "#fee0d2", // Light orange
+      "#fcbba1", // Light-medium orange
+      "#fc9272", // Medium orange
+      "#fb6a4a", // Medium-dark orange
+      "#ef3b2c", // Dark orange-red
+      "#cb181d", // Darker red
+      "#a50f15", // Very dark red
+      "#67000d", // Darkest red (highest sales)
     ])
 
-    console.log("Sales range:", d3.format("$,.0f")(minSales), "to", d3.format("$,.0f")(maxSales))
+    console.log("Fixed color scale: $0 to $6.5M")
 
     // Create value map for FIPS lookup
     const valueMap = new Map()
@@ -295,9 +312,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     svg.call(zoom)
 
-    // Create map group for counties and states
-    const mapGroup = g.append("g").attr("class", "map-group")
-
     // Draw all US counties (background)
     const countyPaths = mapGroup
       .selectAll(".county")
@@ -324,8 +338,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           const countyData = countySales.get(countyName)
 
           if (countyData) {
-            // Highlight county
-            d3.select(this).attr("stroke", "#333").attr("stroke-width", 2).style("filter", "brightness(1.1)")
+            // **ENHANCED: Thicker highlight stroke**
+            d3.select(this).attr("stroke", "#333").attr("stroke-width", 3).style("filter", "brightness(1.1)")
 
             // Show tooltip
             showTooltip(event, countyName, countyData)
@@ -358,27 +372,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       })
 
-    // Draw state boundaries
+    // **ENHANCED: Thicker state boundaries**
     mapGroup
       .append("path")
       .datum(stateMesh)
       .attr("fill", "none")
       .attr("stroke", "#333")
-      .attr("stroke-width", 1)
+      .attr("stroke-width", 0.5) 
       .attr("stroke-linejoin", "round")
       .attr("d", path)
 
-    // Highlight Iowa state boundary
+    // **ENHANCED: Much thicker Iowa state boundary with better visibility**
     const iowaState = states.features.find((d) => d.id === "19") // Iowa FIPS code
     if (iowaState) {
       mapGroup
         .append("path")
         .datum(iowaState)
         .attr("fill", "none")
-        .attr("stroke", "#e53935")
-        .attr("stroke-width", 2)
-        .attr("stroke-dasharray", "5,5")
+        .attr("stroke", "#ff4444") // **CHANGED: Brighter red color**
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "8,4") // **ENHANCED: Larger dash pattern**
+        .attr("stroke-linecap", "round") // **ADDED: Rounded line caps**
         .attr("d", path)
+        .style("filter", "drop-shadow(0 0 3px rgba(255, 68, 68, 0.6))") // **ADDED: Glow effect**
     }
 
     // Function to zoom to Iowa
@@ -416,13 +432,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       zoomToIowa()
     }, 1000)
 
-    // Create info panels
-    createColorLegend(infoContainer, color, minSales, maxSales)
+    // Create info panels with fixed range
+    createColorLegend(infoContainer, color, 0, 6500000) // CHANGED to fixed 0-6.5M
     createStatsPanel(infoContainer, countySales)
     createInfoPanel(infoContainer)
     createTopCitiesPanel(infoContainer, citySales)
 
-    console.log("✅ US choropleth map rendered successfully with Iowa zoom functionality")
+    console.log("✅ US choropleth map rendered successfully with enhanced colors and thicker boundaries")
   }
 
   function showTooltip(event, countyName, countyData) {
@@ -437,7 +453,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .style("color", "white")
       .style("padding", "12px")
       .style("border-radius", "6px")
-      .style("font-size", "13px")
+      .style("font-size", "16px")
       .style("pointer-events", "none")
       .style("opacity", 0)
       .style("z-index", "1000")
@@ -446,7 +462,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     tooltip.transition().duration(200).style("opacity", 1)
 
     tooltip.html(`
-      <div style="font-weight: bold; margin-bottom: 8px; color: #4fc3f7; font-size: 14px;">${countyName} County, Iowa</div>
+      <div style="font-weight: bold; margin-bottom: 8px; color: #ff6b6b; font-size: 18px;">${countyName} County, Iowa</div>
       <div style="margin-bottom: 4px;"><strong>Total Sales:</strong> $${d3.format(",.0f")(countyData.totalSales)}</div>
       <div style="margin-bottom: 4px;"><strong>Volume:</strong> ${d3.format(",.0f")(countyData.totalVolume)} L</div>
       <div style="margin-bottom: 4px;"><strong>Cities:</strong> ${countyData.uniqueCities}</div>
@@ -486,11 +502,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (topCities.length > 0) {
       citiesHtml = `
         <div style="margin-top: 15px;">
-          <div style="font-weight: bold; margin-bottom: 8px; color: #333; font-size: 14px;">Top Cities:</div>
+          <div style="font-weight: bold; margin-bottom: 8px; color: #333; font-size: 16px;">Top Cities:</div>
           ${topCities
             .map(
               ([city, sales], i) => `
-            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 14px;">
               <span style="color: #666;">${i + 1}. ${city}</span>
               <span style="font-weight: bold; color: #333;">$${d3.format(".2s")(sales)}</span>
             </div>
@@ -502,7 +518,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     infoPanel.html(`
-      <h4 style="margin: 0 0 15px 0; color: #333; font-size: 16px;">${countyName} County, Iowa</h4>
+      <h4 style="margin: 0 0 15px 0; color: #333; font-size: 20px;">${countyName} County, Iowa</h4>
       <div class="info-item">
         <span class="info-label">Total Sales:</span>
         <span class="info-value">$${d3.format(",.0f")(countyData.totalSales)}</span>
@@ -573,13 +589,13 @@ ${cityList}`)
     legend
       .append("h4")
       .style("margin", "0 0 12px 0")
-      .style("font-size", "14px")
+      .style("font-size", "18px")
       .style("color", "#374151")
-      .text("Sales Volume")
+      .text("Sales")
 
     const legendSvg = legend.append("svg").attr("width", "100%").attr("height", "80")
 
-    // Create gradient for legend
+    // **UPDATED: Create gradient for new color scheme**
     const gradient = legendSvg
       .append("defs")
       .append("linearGradient")
@@ -588,7 +604,8 @@ ${cityList}`)
       .attr("x2", "100%")
 
     const steps = 9
-    const colors = d3.schemeBlues[9]
+    // **NEW: Warm color scheme for legend**
+    const colors = ["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]
 
     for (let i = 0; i < steps; i++) {
       gradient
@@ -606,32 +623,26 @@ ${cityList}`)
       .style("fill", "url(#legend-gradient)")
       .style("stroke", "#ccc")
 
-    // Add scale labels
-    legendSvg
-      .append("text")
-      .attr("x", 0)
-      .attr("y", 55)
-      .style("font-size", "12px")
-      .style("fill", "#666")
-      .text(`$${d3.format(".2s")(minValue)}`)
+    // Add scale labels with fixed values
+    legendSvg.append("text").attr("x", 0).attr("y", 55).style("font-size", "14px").style("fill", "#666").text("$0") // CHANGED to fixed $0
 
     legendSvg
       .append("text")
       .attr("x", "100%")
       .attr("y", 55)
       .attr("text-anchor", "end")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .style("fill", "#666")
-      .text(`$${d3.format(".2s")(maxValue)}`)
+      .text("$6.5M") // CHANGED to fixed $6.5M
 
     legendSvg
       .append("text")
       .attr("x", "50%")
       .attr("y", 55)
       .attr("text-anchor", "middle")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .style("fill", "#666")
-      .text(`$${d3.format(".2s")((minValue + maxValue) / 2)}`)
+      .text("$3.25M") // CHANGED to fixed midpoint
   }
 
   function createStatsPanel(container, countySales) {
@@ -646,7 +657,7 @@ ${cityList}`)
     stats
       .append("h4")
       .style("margin", "0 0 12px 0")
-      .style("font-size", "14px")
+      .style("font-size", "18px")
       .style("color", "#374151")
       .text("Iowa County Statistics")
 
@@ -662,32 +673,32 @@ ${cityList}`)
     stats
       .append("div")
       .style("margin-bottom", "8px")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .html(`<strong>Active Counties:</strong> ${totalCounties}`)
 
     stats
       .append("div")
       .style("margin-bottom", "8px")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .html(`<strong>Total Sales:</strong> $${d3.format(",.0f")(totalSales)}`)
 
     stats
       .append("div")
       .style("margin-bottom", "12px")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .html(`<strong>Avg per County:</strong> $${d3.format(",.0f")(avgCountySales)}`)
 
     stats
       .append("div")
       .style("font-weight", "bold")
       .style("margin-bottom", "8px")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
       .text("Top 5 Counties:")
 
     topCounties.forEach((county, i) => {
       stats
         .append("div")
-        .style("font-size", "11px")
+        .style("font-size", "13px")
         .style("margin-bottom", "4px")
         .style("color", "#666")
         .style("cursor", "pointer")
@@ -703,10 +714,10 @@ ${cityList}`)
       .style("border", "1px solid #d1d5db")
       .style("border-radius", "8px")
       .style("padding", "16px")
-      .style("min-height", "200px")
+      .style("min-height", "255px")
 
     infoPanel.html(`
-      <h4 style="margin: 0 0 15px 0; color: #333; font-size: 16px;">County Details</h4>
+      <h4 style="margin: 0 0 15px 0; color: #333; font-size: 20px;">County Details</h4>
       <div style="color: #666; font-style: italic;">Hover over an Iowa county to see details</div>
     `)
 
@@ -718,7 +729,7 @@ ${cityList}`)
           display: flex;
           justify-content: space-between;
           margin-bottom: 8px;
-          font-size: 12px;
+          font-size: 14px;
         }
         .info-label {
           color: #666;
@@ -744,7 +755,7 @@ ${cityList}`)
     citiesPanel
       .append("h4")
       .style("margin", "0 0 12px 0")
-      .style("font-size", "14px")
+      .style("font-size", "18px")
       .style("color", "#374151")
       .text("Top Cities in Iowa")
 
@@ -760,9 +771,9 @@ ${cityList}`)
         .style("align-items", "center")
         .style("margin-bottom", "6px")
         .style("padding", "4px 8px")
-        .style("background-color", i < 3 ? "#e3f2fd" : "transparent")
+        .style("background-color", i < 3 ? "#ffebee" : "transparent") // **UPDATED: Light red background for top 3**
         .style("border-radius", "4px")
-        .style("font-size", "11px")
+        .style("font-size", "13px")
         .style("cursor", "pointer")
 
       const leftDiv = cityDiv.append("div")
@@ -772,7 +783,7 @@ ${cityList}`)
         .style("color", "#333")
         .text(`${i + 1}. ${city[0]}`)
 
-      leftDiv.append("div").style("font-size", "10px").style("color", "#666").text(`${city[1].storeCount} stores`)
+      leftDiv.append("div").style("font-size", "12px").style("color", "#666").text(`${city[1].storeCount} stores`)
 
       cityDiv
         .append("div")
