@@ -77,12 +77,6 @@
                     <label for="category-filter">Category</label>
                     <select id="category-filter">
                         <option value="all">All Categories</option>
-                        <option value="whiskey">Whiskey</option>
-                        <option value="vodka">Vodka</option>
-                        <option value="rum">Rum</option>
-                        <option value="gin">Gin</option>
-                        <option value="brandy">Brandy</option>
-                        <option value="liqueur">Liqueur</option>
                     </select>
                 </div>
                 <button id="reset-filters" class="reset-btn">
@@ -101,17 +95,10 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='categories.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="top-categories-chart">
-                        <!-- Student 5: Implement Top Categories Bar Chart -->
-                        <div class="chart-placeholder">
-                            <i class="fas fa-chart-bar"></i>
-                            <p>Top-Selling Categories</p>
-                            <small>Student 5: Implement D3.js horizontal bar chart showing category revenue</small>
-                        </div>
+                        <!-- Categories chart will be rendered here -->
                     </div>
                 </div>
 
@@ -124,17 +111,10 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='brands.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="top-brands-chart">
-                        <!-- Student 6: Implement Top Brands Bar Chart -->
-                        <div class="chart-placeholder">
-                            <i class="fas fa-tags"></i>
-                            <p>Top-Selling Brands or Products</p>
-                            <small>Student 6: Implement D3.js horizontal bar chart with product click filtering</small>
-                        </div>
+                        <!-- Brands chart will be rendered here -->
                     </div>
                 </div>
 
@@ -147,17 +127,10 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='bottle-size.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="bottle-size-chart">
-                        <!-- Student 7: Implement Bottle Size Pie Chart -->
-                        <div class="chart-placeholder">
-                            <i class="fas fa-chart-pie"></i>
-                            <p>Sales by Bottle Size</p>
-                            <small>Student 7: Implement D3.js pie/donut chart showing packaging preferences</small>
-                        </div>
+                        <!-- Bottle size chart will be rendered here -->
                     </div>
                 </div>
 
@@ -170,17 +143,10 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='price-analysis.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="price-volume-chart">
-                        <!-- Student 8: Implement Price vs Volume Scatter Plot -->
-                        <div class="chart-placeholder">
-                            <i class="fas fa-chart-scatter"></i>
-                            <p>Price vs. Volume Sold</p>
-                            <small>Student 8: Implement D3.js scatter plot with hover tooltips</small>
-                        </div>
+                        <!-- Price vs volume chart will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -195,11 +161,6 @@
 
     <script src="js/shared.js"></script>
     <script src="js/navigation.js"></script>
-    <script src="js/data-loader.js"></script>
-    <script src="js/charts/top-categories.js"></script>
-    <script src="js/charts/top-brands.js"></script>
-    <script src="js/charts/bottle-size.js"></script>
-    <script src="js/charts/price-volume.js"></script>
     <script src="js/product-dashboard.js"></script>
 </body>
 </html>

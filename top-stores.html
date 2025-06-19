@@ -28,7 +28,7 @@
                 <li><a href="monthly-sales.html"><i class="fas fa-chart-line"></i> Monthly Sales Trend</a></li>
                 <li><a href="geographic.html"><i class="fas fa-map"></i> Sales by County</a></li>
                 <li><a href="city-sales.html"><i class="fas fa-city"></i> Sales by City</a></li>
-                <li class="active"><a href="top-stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
+                <li><a href="top_stores.html"><i class="fas fa-store"></i> Top Stores</a></li>
             </ul>
         </li>
         <li class="dropdown">
@@ -57,13 +57,32 @@
             <div class="chart-container">
                 <div class="chart-header">
                     <h3>Top Stores by Sales</h3>
+                    <!-- Month Filter Dropdown -->
+                    <div class="filter-controls" style="margin-top: 10px;">
+                        <label for="month-filter" style="font-size: 0.9em; margin-right: 5px;">Filter by Month:</label>
+                        <select id="month-filter" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9em;">
+                            <option value="all">All Months</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="chart-body" id="top-stores-chart">
-                    <!-- Student 4: Add your D3.js top stores chart here -->
+                    <!-- The D3.js chart will be rendered here -->
                     <div class="chart-placeholder">
                         <i class="fas fa-store"></i>
-                        <p>Top Stores Chart</p>
-                        <small>Student 4: Implement your D3.js vertical bar chart here</small>
+                        <p>Loading Top Stores Chart...</p>
+                        <small>Data will appear shortly</small>
                     </div>
                 </div>
             </div>

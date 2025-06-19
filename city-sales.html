@@ -57,6 +57,12 @@
             <div class="chart-container">
                 <div class="chart-header">
                     <h3>Sales by City</h3>
+                    <select id="month-filter" class="form-select"></select>
+                    <!-- Added sort order filter dropdown -->
+                    <select id="sort-order-filter" class="form-select">
+                        <option value="desc">Sales: High to Low</option>
+                        <option value="asc">Sales: Low to High</option>
+                    </select>
                 </div>
                 <div class="chart-body" id="city-sales-chart">
                     <!-- Student 3: Add your D3.js city sales chart here -->

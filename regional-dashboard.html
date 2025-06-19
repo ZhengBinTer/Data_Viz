@@ -54,17 +54,12 @@
                 <p>Regional Sales Overview</p>
             </div>
 
-            <!-- Dashboard Filters -->
+            <!-- Dashboard Filters 
             <div class="dashboard-filters">
                 <div class="filter-group">
                     <label for="county-filter">Filter by County</label>
                     <select id="county-filter">
                         <option value="all">All Counties</option>
-                        <option value="polk">Polk</option>
-                        <option value="linn">Linn</option>
-                        <option value="scott">Scott</option>
-                        <option value="johnson">Johnson</option>
-                        <option value="black-hawk">Black Hawk</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -76,11 +71,25 @@
                         <option value="2021">2021</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label for="month-filter">Filter by Month</label>
+                    <select id="month-filter">
+                        <option value="all">All Months</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-order-filter">Sort Order</label>
+                    <select id="sort-order-filter">
+                        <option value="desc">Descending</option>
+                        <option value="asc">Ascending</option>
+                    </select>
+                </div>
                 <button id="reset-filters" class="reset-btn">
                     <i class="fas fa-undo"></i> Reset Filters
                 </button>
             </div>
-
+            -->
+            
             <!-- Dashboard Grid -->
             <div class="dashboard-grid">
                 <!-- Chart 1: Monthly Sales Trend -->
@@ -92,16 +101,12 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='monthly-sales.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="monthly-sales-chart">
-                        <!-- Student 1: Implement Monthly Sales Trend Line Chart -->
                         <div class="chart-placeholder">
                             <i class="fas fa-chart-line"></i>
-                            <p>Monthly Sales Trend</p>
-                            <small>Student 1: Implement D3.js line chart showing sales over time</small>
+                            <p>Loading Monthly Sales Trend...</p>
                         </div>
                     </div>
                 </div>
@@ -115,16 +120,12 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='geographic.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
-                    <div class="chart-body" id="county-map-chart">
-                        <!-- Student 2: Implement Iowa County Map -->
+                    <div class="chart-body" id="geographic-chart">
                         <div class="chart-placeholder">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <p>Sales by County</p>
-                            <small>Student 2: Implement D3.js Iowa county map with hover tooltips</small>
+                            <i class="fas fa-map"></i>
+                            <p>Loading Geographic Chart...</p>
                         </div>
                     </div>
                 </div>
@@ -138,16 +139,12 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='city-sales.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="city-sales-chart">
-                        <!-- Student 3: Implement City Sales Bar Chart -->
                         <div class="chart-placeholder">
                             <i class="fas fa-city"></i>
-                            <p>Sales by City</p>
-                            <small>Student 3: Implement D3.js horizontal bar chart with click filtering</small>
+                            <p>Loading City Sales Chart...</p>
                         </div>
                     </div>
                 </div>
@@ -161,16 +158,12 @@
                             <button class="btn-chart-action" title="View Full Page" onclick="window.location.href='top-stores.html'">
                                 <i class="fas fa-expand"></i>
                             </button>
-                            <button class="btn-chart-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-chart-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="chart-body" id="top-stores-chart">
-                        <!-- Student 4: Implement Top Stores Bar Chart -->
                         <div class="chart-placeholder">
                             <i class="fas fa-store"></i>
-                            <p>Top Stores by Sales</p>
-                            <small>Student 4: Implement D3.js vertical bar chart showing store performance</small>
+                            <p>Loading Top Stores Chart...</p>
                         </div>
                     </div>
                 </div>
@@ -184,13 +177,17 @@
         </div>
     </div>
 
+    <!-- Load shared utilities first -->
     <script src="js/shared.js"></script>
     <script src="js/navigation.js"></script>
-    <script src="js/data-loader.js"></script>
-    <script src="js/charts/monthly-trend.js"></script>
-    <script src="js/charts/county-map.js"></script>
-    <script src="js/charts/city-sales.js"></script>
-    <script src="js/charts/top-stores.js"></script>
+    
+    <!-- Load individual chart scripts -->
+    <script src="js/monthly-sales.js"></script>
+    <script src="js/geographic.js"></script>
+    <script src="js/city-sales.js"></script>
+    <script src="js/top-stores.js"></script>
+    
+    <!-- Load dashboard coordinator last -->
     <script src="js/regional-dashboard.js"></script>
 </body>
 </html>
