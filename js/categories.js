@@ -1,29 +1,43 @@
-// Student 5: Categories Chart Implementation
+// Student 5: Top 10 Bestselling Items by Bottles Sold Chart Implementation
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("Categories page loaded - Student 5 implement your chart here");
 
   const d3 = window.d3;
   const container = d3.select("#categories-chart");
   const monthFilter = document.getElementById("month-filter");
-  // The categoryFilter element and related logic are removed as requested.
+  const categoryFilter = document.getElementById("category-filter");
 
   // Remove placeholder initially
   container.select(".chart-placeholder").remove();
 
+  // Create a tooltip div and append it to the body
+  const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0) // Initially hidden
+    .style("position", "absolute")
+    .style("background-color", "white")
+    .style("border", "1px solid #ccc")
+    .style("padding", "8px")
+    .style("border-radius", "4px")
+    .style("pointer-events", "none") // Ensures tooltip doesn't block mouse events
+    .style("font-size", "12px")
+    .style("color", "#333");
+
   // Load data from CSV
-  d3.csv("data/small_dataset.csv")
+  d3.csv("data/dataset.csv")
     .then((data) => {
       // Parse and clean data
       data.forEach((d) => {
-        d["Sale (Dollars)"] = +d["Sale (Dollars)"]; // Convert to number
+        d["Bottles Sold"] = +d["Bottles Sold"]; // Convert to number
         d.Date = new Date(d.Date); // Parse date
+        d["Sale (Dollars)"] = +d["Sale (Dollars)"]; // Ensure Sale (Dollars) is parsed as a number
       });
 
-      // Filter out invalid sales data (e.g., negative or zero sales)
-      const validData = data.filter((d) => d["Sale (Dollars)"] > 0 && d["Category Name"] && d.Date);
+      // Filter out invalid bottles sold data (e.g., negative or zero) and missing item description/date
+      const validData = data.filter((d) => d["Bottles Sold"] > 0 && d["Item Description"] && d.Date && d["Category Name"] && d["Sale (Dollars)"] >= 0);
 
       if (validData.length === 0) {
-        console.warn("No valid data after loading CSV for Categories chart.");
+        console.warn("No valid data after loading CSV for Top 10 Bestselling Items chart.");
         container
           .append("div")
           .attr("class", "error-message")
@@ -33,19 +47,27 @@ document.addEventListener("DOMContentLoaded", async () => {
           .html(`
             <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
             <p><strong>No data available</strong></p>
-            <p>No valid sales data found to generate the Categories chart.</p>
+            <p>No valid item sales data found to generate the Top 10 Bestselling Items chart.</p>
           `);
         return;
       }
 
-      // Populate category filter dynamically removed. Categories will now be based on all valid data.
+      // Populate category filter dynamically
+      const uniqueCategories = Array.from(new Set(validData.map(d => d["Category Name"]))).sort();
+      uniqueCategories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
 
 
       function initCategoriesChart() {
         // Clear previous chart if any
         container.html("");
 
-        const selectedMonth = monthFilter ? monthFilter.value : "all"; // Handle if monthFilter is null
+        const selectedMonth = monthFilter ? monthFilter.value : "all";
+        const selectedCategory = categoryFilter ? categoryFilter.value : "all"; // Default to all categories
 
         // Filter data based on selections
         let filteredData = validData;
@@ -56,10 +78,14 @@ document.addEventListener("DOMContentLoaded", async () => {
           );
         }
 
-        // Category filter application logic removed as requested.
+        if (selectedCategory !== "all") {
+            filteredData = filteredData.filter(
+                (d) => d["Category Name"] === selectedCategory
+            );
+        }
 
         if (filteredData.length === 0) {
-          console.warn("No data after filtering for Categories chart.");
+          console.warn("No data after filtering for Top 10 Bestselling Items chart.");
           container
             .append("div")
             .attr("class", "error-message")
@@ -69,24 +95,30 @@ document.addEventListener("DOMContentLoaded", async () => {
             .html(`
               <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
               <p><strong>No data available</strong></p>
-              <p>No sales data found for the selected filters. Please adjust your filters.</p>
+              <p>No item sales data found for the selected filters. Please adjust your filters.</p>
             `);
           return;
         }
 
-        // Group data by category name and sum sales
-        const categorySales = d3.rollup(
+        // Group data by Item Description and sum both Bottles Sold and Sale (Dollars)
+        const itemMetrics = d3.rollup(
           filteredData,
-          (v) => d3.sum(v, (d) => d["Sale (Dollars)"]),
-          (d) => d["Category Name"]
+          (v) => ({
+            bottlesSold: d3.sum(v, (d) => d["Bottles Sold"]),
+            totalSales: d3.sum(v, (d) => d["Sale (Dollars)"])
+          }),
+          (d) => d["Item Description"]
         );
 
-        // Convert to array and sort by sales in descending order
-        const sortedCategories = Array.from(categorySales)
-          .sort(([, a], [, b]) => b - a)
-          .slice(0, 10); // Get top 10 categories
+        // Convert to array and sort by bottles sold (always descending)
+        let sortedItems = Array.from(itemMetrics)
+          .sort(([, a], [, b]) => b.bottlesSold - a.bottlesSold); // Default to descending sort based on bottlesSold
 
-        const categoriesList = sortedCategories.map(d => d[0]);
+
+        // Take top 10 after sorting
+        sortedItems = sortedItems.slice(0, 10);
+
+        const itemsList = sortedItems.map(d => d[0]);
 
         // Create main wrapper with side-by-side layout
         const chartWrapper = container
@@ -106,24 +138,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           .style("min-width", "0")
           .style("height", "100%");
 
-        // Legend container (right side)
-        const legendContainer = chartWrapper
-          .append("div")
-          .attr("class", "legend-area")
-          .style("width", "250px")
-          .style("flex-shrink", "0")
-          .style("height", "100%")
-          .style("display", "flex")
-          .style("flex-direction", "column")
-          .style("background-color", "#f8f9fa")
-          .style("border", "1px solid #d1d5db")
-          .style("border-radius", "8px")
-          .style("padding", "15px")
-          .style("overflow-y", "auto");
 
         const margin = { top: 20, right: 30, bottom: 40, left: 200 };
         const chartWidth = chartContainer.node().getBoundingClientRect().width - margin.left - margin.right;
-        const chartHeight = Math.min(400, sortedCategories.length * 40 + margin.top + margin.bottom);
+        // Adjust chart height based on number of items and desired bar spacing
+        const chartHeight = Math.min(400, sortedItems.length * 40 + margin.top + margin.bottom);
+
 
         const svg = chartContainer
           .append("svg")
@@ -134,21 +154,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           .append("g")
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Color scale
-        const colorScale = d3.scaleOrdinal()
-          .domain(categoriesList)
-          .range(d3.schemeCategory10);
 
         // X scale
         const xScale = d3
           .scaleLinear()
-          .domain([0, d3.max(sortedCategories, (d) => d[1]) * 1.2])
+          .domain([0, d3.max(sortedItems, (d) => d[1].bottlesSold) * 1.2]) // Max bottles sold, with some padding
           .range([0, chartWidth]);
 
         // Y scale
         const yScale = d3
           .scaleBand()
-          .domain(sortedCategories.map((d) => d[0]))
+          .domain(sortedItems.map((d) => d[0]))
           .range([0, chartHeight])
           .padding(0.1);
 
@@ -156,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         svg
           .append("g")
           .attr("transform", `translate(0,${chartHeight})`)
-          .call(d3.axisBottom(xScale).tickFormat(d3.format("$.2s")))
+          .call(d3.axisBottom(xScale).tickFormat(d3.format(".2s"))) // Format as short form numbers
           .selectAll("text")
           .attr("font-size", "12px");
 
@@ -166,35 +182,48 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Bars
         svg
           .selectAll(".bar")
-          .data(sortedCategories)
+          .data(sortedItems)
           .enter()
           .append("rect")
           .attr("class", "bar")
           .attr("y", (d) => yScale(d[0]))
           .attr("x", 0)
           .attr("height", yScale.bandwidth())
-          .attr("fill", (d) => colorScale(d[0])) // Apply color based on Category Name
+          .attr("fill", "#dc3545") // Set fill color to red
           // Initial state for animation
           .attr("width", 0) // Start with zero width
           .transition() // Animate the width
           .duration(800) // Duration of the animation in milliseconds
           .delay((d, i) => i * 50) // Stagger animation for each bar
-          .attr("width", (d) => xScale(d[1])) // Animate to full width
+          .attr("width", (d) => xScale(d[1].bottlesSold)) // Animate to full width
           .on("end", function() { // Re-attach mouse events after animation ends
             d3.select(this)
               .on("mouseover", function(event, d) {
+                // Show tooltip on mouseover
+                tooltip.transition()
+                  .duration(200)
+                  .style("opacity", .9);
+                tooltip.html(`Item: <strong>${d[0]}</strong><br/>Bottles Sold: <strong>${d3.format(",.0f")(d[1].bottlesSold)}</strong><br/>Total Sales: <strong>${d3.format("$,.2f")(d[1].totalSales)}</strong>`)
+                  .style("left", (event.pageX + 10) + "px")
+                  .style("top", (event.pageY - 28) + "px");
+
                 // Darken the bar color on mouseover
                 d3.select(this)
                   .transition() // Smooth transition for visual effect
                   .duration(200) // Transition duration
-                  .attr("fill", d3.color(colorScale(d[0])).darker(0.75)); // Darken the color
+                  .attr("fill", d3.color("#dc3545").darker(0.75)); // Darken the red color
               })
               .on("mouseout", function(event, d) {
+                // Hide tooltip on mouseout
+                tooltip.transition()
+                  .duration(500)
+                  .style("opacity", 0);
+
                 // Revert to original color on mouseout
                 d3.select(this)
                   .transition() // Smooth transition for visual effect
                   .duration(200) // Transition duration
-                  .attr("fill", colorScale(d[0])); // Original color
+                  .attr("fill", "#dc3545"); // Original red color
               });
           });
 
@@ -202,21 +231,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Add labels for bars
         svg
           .selectAll(".bar-label")
-          .data(sortedCategories)
+          .data(sortedItems)
           .enter()
           .append("text")
           .attr("class", "bar-label")
           .attr("x", 0) // Start labels at x=0
           .attr("y", (d) => yScale(d[0]) + yScale.bandwidth() / 2)
           .attr("dy", "0.35em")
-          .text((d) => d3.format("$,.0f")(d[1]))
+          .text((d) => d3.format(",.0f")(d[1].bottlesSold)) // Format bottles sold with commas
           .attr("font-size", "10px")
           .attr("fill", "#333")
           // Animate the labels
           .transition()
           .duration(800) // Match bar animation duration
           .delay((d, i) => i * 50) // Match bar animation delay
-          .attr("x", (d) => xScale(d[1]) + 5); // Animate to final position
+          .attr("x", (d) => xScale(d[1].bottlesSold) + 5); // Animate to final position
 
         // Add X axis label
         svg
@@ -225,51 +254,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           .attr("text-anchor", "middle")
           .attr("x", chartWidth / 2)
           .attr("y", chartHeight + margin.bottom - 5)
-          .text("Total Sales (Dollars)")
+          .text("Total Bottles Sold")
           .attr("font-size", "12px")
           .attr("fill", "#555");
-
-        // Add Legend
-        const legendItems = legendContainer
-          .selectAll(".legend-item")
-          .data(sortedCategories)
-          .enter()
-          .append("div")
-          .attr("class", "legend-item")
-          .style("display", "flex")
-          .style("align-items", "center")
-          .style("gap", "8px")
-          .style("padding", "6px 0")
-          .style("font-size", "12px")
-          .style("line-height", "1.2")
-          .style("border-bottom", "1px solid #e5e7eb");
-
-        legendItems
-          .append("div")
-          .style("width", "12px")
-          .style("height", "12px")
-          .style("background-color", (d) => colorScale(d[0]))
-          .style("border", "1px solid #ccc")
-          .style("flex-shrink", "0");
-
-        legendItems
-          .append("span")
-          .style("color", "#374151")
-          .style("font-size", "11px")
-          .style("line-height", "1.3")
-          .text((d) => d[0]);
       }
 
       // Initial chart render after data is loaded
       initCategoriesChart();
 
       // Event Listeners for filters
-      // Removed the category filter event listener.
       if (monthFilter) {
         monthFilter.addEventListener("change", initCategoriesChart);
       }
-      // Removed: if (categoryFilter) { categoryFilter.addEventListener("change", initCategoriesChart); }
-
+      if (categoryFilter) {
+        categoryFilter.addEventListener("change", initCategoriesChart);
+      }
 
       // Optional: Handle window resize to redraw chart
       window.addEventListener('resize', () => {
@@ -292,7 +291,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .html(`
           <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
           <p><strong>Error loading dataset</strong></p>
-          <p>Please check that 'data/Cleaned_Liquor_Sales.csv' exists and is accessible for the Categories chart.</p>
+          <p>Please check that 'data/dataset.csv' exists and is accessible for the Top 10 Bestselling Items chart.</p>
         `);
     });
 });

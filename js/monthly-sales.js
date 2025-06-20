@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   container.select(".chart-placeholder").remove()
 
 // Load the smaller dataset
-  d3.csv("data/small_dataset.csv")
+  d3.csv("data/dataset.csv")
     .then((data) => {
       const parseDate = d3.timeParse("%Y-%m-%d")  // <-- Updated parser
       const formatMonth = d3.timeFormat("%B")
@@ -130,9 +130,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Chart dimensions - INCREASED SIZE
         const containerRect = chartContainer.node().getBoundingClientRect()
-        const margin = { top: 60, right: 40, bottom: 120, left: 140 } // Increased margins
+        const margin = { top: 60, right: 40, bottom: 400, left: 140 } // Increased margins
         const width = Math.max(1200, containerRect.width - 40) - margin.left - margin.right // Increased from 900
-        const height = Math.max(700, containerRect.height - 40) - margin.top - margin.bottom // Increased from 500
+        const height = Math.max(800, containerRect.height - 40) - margin.top - margin.bottom // Increased from 500
 
         // Create SVG in chart container
         const svg = chartContainer

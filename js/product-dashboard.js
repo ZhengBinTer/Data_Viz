@@ -3,16 +3,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Product Dashboard loaded - Using regional dashboard template")
 
   let dashboardData = null
+  const d3 = window.d3 // Declare the d3 variable
 
   try {
     // Load data once for all charts
-    dashboardData = await d3.csv("data/small_dataset.csv")
+    dashboardData = await d3.csv("data/dataset.csv")
 
     // Parse and clean data
     dashboardData.forEach((d) => {
       d["Sale (Dollars)"] = +d["Sale (Dollars)"] || 0
       d["Volume Sold (Liters)"] = +d["Volume Sold (Liters)"] || 0
       d["Bottle Volume (ml)"] = +d["Bottle Volume (ml)"] || 0
+      d["Bottles Sold"] = +d["Bottles Sold"] || 0 // Added for bestselling items
+      d["State Bottle Cost"] = +d["State Bottle Cost"] || 0 // Added for profit margin
+      d["State Bottle Retail"] = +d["State Bottle Retail"] || 0 // Added for profit margin
       d.Date = new Date(d.Date)
     })
 
@@ -49,8 +53,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!dashboardData) return
 
     // Initialize all 4 charts with dashboard data
-    initCategoriesFromExisting(dashboardData)
-    initBrandsFromExisting(dashboardData)
+    initBestsellingItemsChart(dashboardData) // Updated: Now shows bestselling items
+    initProfitMarginChart(dashboardData) // Updated: Now shows profit margin by category
     initBottleSizeFromExisting(dashboardData)
     initPriceVolumeFromExisting(dashboardData)
   }
@@ -80,8 +84,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const filteredData = getFilteredData()
 
     // Update all charts with filtered data
-    initCategoriesFromExisting(filteredData)
-    initBrandsFromExisting(filteredData)
+    initBestsellingItemsChart(filteredData)
+    initProfitMarginChart(filteredData)
     initBottleSizeFromExisting(filteredData)
     initPriceVolumeFromExisting(filteredData)
   }
@@ -103,37 +107,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     return filtered
   }
 
-  // Chart 5: Top Categories (Reusing categories.js logic) - EXPANDED WIDTH
-  function initCategoriesFromExisting(data) {
+  // Chart 5: Top 10 Bestselling Items by Bottles Sold (Updated from categories.js)
+  function initBestsellingItemsChart(data) {
     const container = d3.select("#top-categories-chart")
     container.selectAll("*").remove()
 
-    // Group by category and sum sales
-    const categorySales = d3.rollup(
-      data,
-      (v) => d3.sum(v, (d) => d["Sale (Dollars)"]),
-      (d) => d["Category Name"],
-    )
+    // Filter valid data for bottles sold analysis
+    const validData = data.filter((d) => d["Bottles Sold"] > 0 && d["Item Description"] && d["Category Name"])
 
-    const sortedCategories = Array.from(categorySales)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 10) // Top 10 categories
-
-    if (sortedCategories.length === 0) {
+    if (validData.length === 0) {
       container
         .append("div")
         .attr("class", "no-data-message")
         .style("padding", "20px")
         .style("text-align", "center")
         .style("color", "#666")
-        .html("<i class='fas fa-info-circle'></i><p>No category data available</p>")
+        .html("<i class='fas fa-info-circle'></i><p>No bestselling items data available</p>")
       return
     }
 
-    // EXPANDED DIMENSIONS - Fill more of the dashboard space
+    // Group data by Item Description and sum bottles sold (same logic as updated categories.js)
+    const itemMetrics = d3.rollup(
+      validData,
+      (v) => ({
+        bottlesSold: d3.sum(v, (d) => d["Bottles Sold"]),
+        totalSales: d3.sum(v, (d) => d["Sale (Dollars)"]),
+      }),
+      (d) => d["Item Description"],
+    )
+
+    // Convert to array and sort by bottles sold (descending)
+    const sortedItems = Array.from(itemMetrics)
+      .sort(([, a], [, b]) => b.bottlesSold - a.bottlesSold)
+      .slice(0, 8) // Top 8 for dashboard
+
+    // Dashboard dimensions
     const margin = { top: 20, right: 40, bottom: 80, left: 200 }
     const containerWidth = container.node().getBoundingClientRect().width || 600
-    const width = containerWidth - margin.left - margin.right - 20 // Account for padding
+    const width = containerWidth - margin.left - margin.right - 20
     const height = 360 - margin.top - margin.bottom
 
     const svg = container
@@ -143,68 +154,64 @@ document.addEventListener("DOMContentLoaded", async () => {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`)
 
+    // X scale for bottles sold
     const xScale = d3
       .scaleLinear()
-      .domain([0, d3.max(sortedCategories, (d) => d[1]) * 1.1])
+      .domain([0, d3.max(sortedItems, (d) => d[1].bottlesSold) * 1.2])
       .range([0, width])
 
+    // Y scale for item names
     const yScale = d3
       .scaleBand()
-      .domain(sortedCategories.map((d) => d[0]))
+      .domain(sortedItems.map((d) => d[0]))
       .range([0, height])
       .padding(0.1)
-
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
 
     // Add X axis
     svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(8).tickFormat(d3.format("$.2s")))
+      .call(d3.axisBottom(xScale).tickFormat(d3.format(".2s")))
       .selectAll("text")
       .attr("font-size", "11px")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
-      .attr("transform", "rotate(-45)")
 
     // Add Y axis
-    svg.append("g").call(d3.axisLeft(yScale)).selectAll("text").attr("font-size", "12px")
+    svg.append("g").call(d3.axisLeft(yScale)).selectAll("text").attr("font-size", "10px")
 
-    // Add bars with animation
+    // Add bars with animation (red color like updated categories.js)
     svg
       .selectAll(".bar")
-      .data(sortedCategories)
+      .data(sortedItems)
       .enter()
       .append("rect")
       .attr("class", "bar")
       .attr("y", (d) => yScale(d[0]))
       .attr("x", 0)
       .attr("height", yScale.bandwidth())
-      .attr("fill", (d) => colorScale(d[0]))
+      .attr("fill", "#dc3545") // Red color from updated categories.js
       .attr("width", 0)
       .transition()
       .duration(800)
       .delay((d, i) => i * 50)
-      .attr("width", (d) => xScale(d[1]))
+      .attr("width", (d) => xScale(d[1].bottlesSold))
 
     // Add labels
     svg
       .selectAll(".bar-label")
-      .data(sortedCategories)
+      .data(sortedItems)
       .enter()
       .append("text")
       .attr("class", "bar-label")
       .attr("x", 0)
       .attr("y", (d) => yScale(d[0]) + yScale.bandwidth() / 2)
       .attr("dy", "0.35em")
-      .text((d) => d3.format("$,.0f")(d[1]))
+      .text((d) => d3.format(",.0f")(d[1].bottlesSold))
       .attr("font-size", "10px")
       .attr("fill", "#333")
       .transition()
       .duration(800)
       .delay((d, i) => i * 50)
-      .attr("x", (d) => xScale(d[1]) + 5)
+      .attr("x", (d) => xScale(d[1].bottlesSold) + 5)
 
     // Add X axis label
     svg
@@ -213,44 +220,53 @@ document.addEventListener("DOMContentLoaded", async () => {
       .attr("text-anchor", "middle")
       .attr("x", width / 2)
       .attr("y", height + 70)
-      .text("Total Sales (Dollars)")
+      .text("Total Bottles Sold")
       .attr("font-size", "12px")
       .attr("fill", "#555")
   }
 
-  // Chart 6: Top Brands (Reusing brands.js logic) - EXPANDED WIDTH
-  function initBrandsFromExisting(data) {
+  // Chart 6: Average Profit Margin by Category (Updated from brands.js)
+  function initProfitMarginChart(data) {
     const container = d3.select("#top-brands-chart")
     container.selectAll("*").remove()
 
-    // Group by item description and sum sales
-    const brandSales = d3.rollup(
-      data,
-      (v) => d3.sum(v, (d) => d["Sale (Dollars)"]),
-      (d) => d["Item Description"],
+    // Filter valid data for profit margin analysis (same logic as updated brands.js)
+    const validData = data.filter(
+      (d) => d["State Bottle Retail"] > 0 && d["State Bottle Cost"] > 0 && d["Category Name"],
     )
 
-    const sortedBrands = Array.from(brandSales)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 10) // Top 10 brands
-
-    if (sortedBrands.length === 0) {
+    if (validData.length === 0) {
       container
         .append("div")
         .attr("class", "no-data-message")
         .style("padding", "20px")
         .style("text-align", "center")
         .style("color", "#666")
-        .html("<i class='fas fa-info-circle'></i><p>No brand data available</p>")
+        .html("<i class='fas fa-info-circle'></i><p>No profit margin data available</p>")
       return
     }
+
+    // Group data by Category Name and calculate average profit margin per bottle
+    const categoryProfitMargins = d3.rollup(
+      validData,
+      (v) => {
+        const profitPerBottleValues = v.map((d) => d["State Bottle Retail"] - d["State Bottle Cost"])
+        return profitPerBottleValues.length > 0 ? d3.mean(profitPerBottleValues) : 0
+      },
+      (d) => d["Category Name"],
+    )
+
+    // Convert to array and sort by average profit margin in descending order
+    const sortedCategories = Array.from(categoryProfitMargins)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 8) // Top 8 for dashboard
 
     // Calculate dynamic left margin based on longest label
     const tempSvg = d3.select("body").append("svg").attr("class", "temp-svg").style("visibility", "hidden")
     let maxLabelWidth = 0
     const yAxisLabelFontSize = 12
 
-    sortedBrands.forEach((d) => {
+    sortedCategories.forEach((d) => {
       const textElement = tempSvg.append("text").attr("font-size", `${yAxisLabelFontSize}px`).text(d[0])
       const bbox = textElement.node().getBBox()
       maxLabelWidth = Math.max(maxLabelWidth, bbox.width)
@@ -260,10 +276,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const dynamicLeftMargin = Math.min(maxLabelWidth + 50, 280)
 
-    // EXPANDED DIMENSIONS - Fill more of the dashboard space
+    // Dashboard dimensions
     const containerWidth = container.node().getBoundingClientRect().width || 600
     const margin = { top: 20, right: 40, bottom: 80, left: dynamicLeftMargin }
-    const width = containerWidth - margin.left - margin.right - 20 // Account for padding
+    const width = containerWidth - margin.left - margin.right - 20
     const height = 360 - margin.top - margin.bottom
 
     const svg = container
@@ -273,30 +289,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`)
 
+    // X scale for profit margin
     const xScale = d3
       .scaleLinear()
-      .domain([0, d3.max(sortedBrands, (d) => d[1]) * 1.1])
+      .domain([0, d3.max(sortedCategories, (d) => d[1]) * 1.2])
       .range([0, width])
 
+    // Y scale for category names
     const yScale = d3
       .scaleBand()
-      .domain(sortedBrands.map((d) => d[0]))
+      .domain(sortedCategories.map((d) => d[0]))
       .range([0, height])
       .padding(0.1)
 
-    const singleBarColor = "#e53935" // Red color from brands.js
+    const singleBarColor = "#e53935" // Red color from updated brands.js
 
     // Add X axis
     svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(8).tickFormat(d3.format("$.2s")))
+      .call(d3.axisBottom(xScale).tickFormat(d3.format("$.2f")))
       .selectAll("text")
       .attr("font-size", "11px")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
-      .attr("transform", "rotate(-45)")
 
     // Add Y axis
     svg
@@ -310,7 +324,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Add bars with animation
     svg
       .selectAll(".bar")
-      .data(sortedBrands)
+      .data(sortedCategories)
       .enter()
       .append("rect")
       .attr("class", "bar")
@@ -327,14 +341,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Add labels
     svg
       .selectAll(".bar-label")
-      .data(sortedBrands)
+      .data(sortedCategories)
       .enter()
       .append("text")
       .attr("class", "bar-label")
       .attr("x", 0)
       .attr("y", (d) => yScale(d[0]) + yScale.bandwidth() / 2)
       .attr("dy", "0.35em")
-      .text((d) => d3.format("$,.0f")(d[1]))
+      .text((d) => d3.format("$,.2f")(d[1]))
       .attr("font-size", "10px")
       .attr("fill", "#333")
       .transition()
@@ -349,12 +363,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       .attr("text-anchor", "middle")
       .attr("x", width / 2)
       .attr("y", height + 70)
-      .text("Total Sales (Dollars)")
+      .text("Average Profit Margin per Bottle ($)")
       .attr("font-size", "12px")
       .attr("fill", "#555")
   }
 
-  // Chart 7: Bottle Size (Reusing bottle-size.js logic) - EXPANDED SIZE
+  // Chart 7: Bottle Size (unchanged)
   function initBottleSizeFromExisting(data) {
     const container = d3.select("#bottle-size-chart")
     container.selectAll("*").remove()
@@ -410,9 +424,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return b.totalSales - a.totalSales
     })
 
-    // EXPANDED DIMENSIONS - Fill more of the dashboard space
+    // Dashboard dimensions
     const containerWidth = container.node().getBoundingClientRect().width || 600
-    const width = containerWidth - 40 // Account for padding
+    const width = containerWidth - 40
     const height = 360
     const radius = Math.min(width, height) / 2 - 30
 
@@ -449,7 +463,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .style("pointer-events", "none")
   }
 
-  // Chart 8: Price vs Volume (Reusing price-analysis.js logic) - EXPANDED SIZE
+  // Chart 8: Price vs Volume (unchanged)
   function initPriceVolumeFromExisting(data) {
     const container = d3.select("#price-volume-chart")
     container.selectAll("*").remove()
@@ -479,10 +493,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return
     }
 
-    // EXPANDED DIMENSIONS - Fill more of the dashboard space
+    // Dashboard dimensions
     const containerWidth = container.node().getBoundingClientRect().width || 600
     const margin = { top: 20, right: 40, bottom: 60, left: 80 }
-    const width = containerWidth - margin.left - margin.right - 20 // Account for padding
+    const width = containerWidth - margin.left - margin.right - 20
     const height = 360 - margin.top - margin.bottom
 
     const svg = container
@@ -526,7 +540,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .attr("opacity", 0.7)
       .transition()
       .duration(750)
-      .attr("r", 6) // Slightly larger circles for better visibility
+      .attr("r", 6)
 
     // Add axis labels
     svg
@@ -555,7 +569,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="error-message" style="text-align: center; padding: 40px;">
         <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #dc3545; margin-bottom: 10px;"></i>
         <p><strong>Error Loading Data</strong></p>
-        <p>Please check that 'data/small_dataset.csv' exists and is accessible.</p>
+        <p>Please check that 'data/dataset.csv' exists and is accessible.</p>
       </div>
     `)
   }
