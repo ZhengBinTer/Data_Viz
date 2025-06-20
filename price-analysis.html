@@ -18,61 +18,91 @@
       box-shadow:0 0 5px rgba(0,0,0,.15);
       z-index: 1000; 
     }
-    /* filter panel */
-    .filter-panel {
-      display:flex;align-items:center;flex-wrap:wrap;gap:15px;
-      justify-content:center;margin:15px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
     }
-    /* main content alignment */
+    .wrapper {
+      display: flex;
+      height: 100vh;
+    }    
     .main-content {
-      margin-left: 220px;
+      flex-grow: 1;
       padding: 30px;
+      background-color: #f4f4f4;
+      max-width: calc(100% - 220px);
     }
-
+    
+    .page-header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #c0392b;
+    }
+    
+    
+    .page-header {
+      margin-bottom: 20px;
+    }
     /* Chart & Legend container */
     .chart-and-legend-container {
-      display:flex;
+      display: flex;
       flex-direction: row;
+      justify-content: space-between;
       align-items: flex-start;
-      justify-content: center;
-      margin-top: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 100%;
+      gap: 10px; /* smaller gap */
+    }
+    .chart-and-legend-container {
+      display: flex;
+      gap: 0px;
+      padding: 20px;
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 20px;
-      gap: 20px; 
-      max-width: 1700px; 
-      margin-left: 20px; 
-      margin-right: 20px; 
+      width: 100%;
+      justify-content: center; /* helps center chart area */
     }
-    #price-volume-chart { 
+    
+    .chart-wrapper {
       flex-grow: 1;
-      max-width: 900px; 
-      min-height: 500px; 
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* ensures the chart is horizontally centered */
+      justify-content: center; /* optional: center vertically if needed */
+    }
+    .chart-wrapper h3 {
+      text-align: center;
+      width: 100%;
+      margin-bottom: 20px;
+    } 
+    
+    
+
+    
+    #price-volume-chart {
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 500px;
+      width: 100%;
     }
-    #price-volume-chart svg {
-        display: block; 
-        overflow: visible; 
-    }
+    
+    
     .legend {
-      display:flex;
-      flex-direction: column; 
-      flex-shrink: 0; 
-      width: 250px; 
-      padding-left: 20px;
+      flex-shrink: 0;
+      width: 250px;
       border-left: 1px solid #eee;
-      margin-top: 0; 
+      padding-left: 10px; /* smaller padding */
       max-height: 500px;
-      overflow-y: auto; 
-      box-sizing: border-box; 
+      overflow-y: auto;
     }
+      
+    
     .legend-item {
       display: flex;
       align-items: center;
@@ -81,8 +111,11 @@
       padding: 3px 0;
     }
     .legend-color {
-      width:15px;height:15px;border-radius:3px;display:inline-block;
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
       border: 1px solid #ddd;
+      display: inline-block;
     }
 
     /* Axis labels style */
@@ -94,23 +127,18 @@
     /* Analysis Grid and Cards */
     .analysis-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr; 
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
-      margin-top: 20px; 
-      align-items: start; 
-      max-width: 1700px; 
-      margin-left: 20px;
-      margin-right: 20px; 
+      margin-top: 20px;
     }
     .analysis-card {
       background-color: white;
+      padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 20px;
     }
     .analysis-card h4 {
       font-size: 1.2em;
-      font-weight: bold;
       margin-bottom: 15px;
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
@@ -129,42 +157,38 @@
         border-bottom: none;
     }
     .stat-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-        align-items: center; 
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
     }
     .stat-item:last-child {
-        border-bottom: none;
-    }
-    .stat-label {
-        font-weight: bold;
-        color: #555;
-    }
-    .stat-value {
-        font-weight: bold;
-        color: #333;
-        font-size: 1.1em; 
+      border-bottom: none;
     }
 
+    .stat-label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      color: #333;
+    }
     @media (max-width: 992px) {
-        .analysis-grid {
-            grid-template-columns: 1fr; 
-        }
-        .chart-and-legend-container {
-          flex-direction: column;
-          align-items: center;
-        }
-        .legend {
-          width: 100%; 
-          border-left: none; 
-          border-top: 1px solid #eee; 
-          padding-left: 0;
-          padding-top: 20px;
-          max-height: none; 
-          overflow-y: visible;
-        }
+      .analysis-grid {
+        grid-template-columns: 1fr;
+      }
+      .chart-and-legend-container {
+        flex-direction: column;
+      }
+      .legend {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        padding-left: 0;
+      }
     }
   </style>
 </head>
@@ -196,10 +220,10 @@
             <i class="fas fa-chevron-down dropdown-arrow"></i>
           </a>
           <ul class="dropdown-menu show">
-            <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
-            <li><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
-            <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
-            <li class="active"><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
+                <li class="active"><a href="categories.html"><i class="fas fa-chart-bar"></i> Best Selling Item Analysis</a></li>
+                <li><a href="brands.html"><i class="fas fa-tags"></i> Profit Margin Analysis</a></li>
+                <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
+                <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
           </ul>
         </li>
       </ul>
@@ -213,7 +237,7 @@
 
 
       <div class="chart-and-legend-container">
-        <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="chart-wrapper">
           <h3>Average Price vs. Total Volume Sold by Category</h3>
           <div id="price-volume-chart">
             <div class="chart-placeholder">

@@ -3,10 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Brands Analysis - Iowa Liquor Dashboard</title>
+    <title>Average Profit Margin by Category - Iowa Liquor Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Styles to make text and container bigger */
+        body {
+            font-size: 18px; /* Increase base font size for the whole body */
+        }
+        .main-content {
+            padding: 30px; /* Increase padding around the main content */
+        }
+        .page-header h1 {
+            font-size: 2.8em; /* Make page title larger */
+        }
+        .page-header p {
+            font-size: 1.4em; /* Make page description larger */
+        }
+        .chart-body {
+            min-height: 500px; /* Ensure chart container has a minimum height */
+            padding: 30px; /* Increase padding around the chart */
+        }
+        .chart-placeholder p {
+            font-size: 1.8em; /* Make placeholder text larger */
+        }
+        .chart-placeholder small {
+            font-size: 1.2em; /* Make placeholder small text larger */
+        }
+
+        /* Tooltip styles */
+        #tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            pointer-events: none; /* Allows mouse events to pass through */
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.2s; /* Smooth fade in/out */
+            font-size: 0.9em;
+            line-height: 1.4;
+            max-width: 200px; /* Limit tooltip width */
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensure tooltip is on top */
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -37,8 +80,8 @@
                 <i class="fas fa-chevron-down dropdown-arrow"></i>
             </a>
             <ul class="dropdown-menu show">
-                <li><a href="categories.html"><i class="fas fa-chart-bar"></i> Top Categories</a></li>
-                <li class="active"><a href="brands.html"><i class="fas fa-tags"></i> Top Brands</a></li>
+                <li class="active"><a href="categories.html"><i class="fas fa-chart-bar"></i> Best Selling Item Analysis</a></li>
+                <li><a href="brands.html"><i class="fas fa-tags"></i> Profit Margin Analysis</a></li>
                 <li><a href="bottle-size.html"><i class="fas fa-chart-pie"></i> Bottle Size Analysis</a></li>
                 <li><a href="price-analysis.html"><i class="fas fa-dollar-sign"></i> Price vs Volume</a></li>
             </ul>
@@ -49,81 +92,28 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="page-header">
-                <h1>Top Brands Analysis</h1>
-                <p>Top-selling brands and products performance</p>
+                <h1>Average Profit Margin by Category</h1>
+                <p>Analysis of average profit margin per bottle across different liquor categories.</p>
             </div>
 
-            <!-- Filters -->
-            <div class="filters-section">
-                <div class="filter-group">
-                    <label for="category-filter">Category:</label>
-                    <select id="category-filter">
-                        <option value="all">All Categories</option>
-                        <option value="whiskey">Whiskey</option>
-                        <option value="vodka">Vodka</option>
-                        <option value="rum">Rum</option>
-                        <option value="gin">Gin</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="month-filter">Month:</label>
-                    <select id="month-filter">
-                        <option value="all">All Months</option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                </div>
-                <!--<button id="reset-filters">Reset Filters</button> -->
-            </div>
+            <!-- Filters Section Removed -->
 
             <!-- Chart Container -->
                 <div class="chart-body" id="brands-chart">
-                    <!-- Student 6: Add your D3.js brands chart here -->
+                    <!-- Student 6: Add your D3.js chart for Average Profit Margin by Category here -->
                     <div class="chart-placeholder">
-                        <i class="fas fa-tags"></i>
-                        <p>Top Brands Chart</p>
-                        <small>Student 6: Implement your D3.js horizontal bar chart with product click filtering</small>
+                        <i class="fas fa-chart-bar"></i>
+                        <p>Average Profit Margin by Category Chart</p>
+                        <small>This chart displays the average profit margin per bottle for various liquor categories.</small>
                     </div>
                 </div>
             </div>
-            <!-- Analysis Section 
-            <div class="analysis-grid">
-                <div class="analysis-card">
-                   <!-- <h4>Brand Insights</h4>
-                    <ul>
-                        <li>Premium brands show higher profit margins</li>
-                        <li>Local brands perform well in specific regions</li>
-                        <li>Seasonal variations affect brand preferences</li>
-                    </ul>
-                </div>
-                 <div class="analysis-card">
-                    <h4>Brand Statistics</h4>
-                    <div class="stat-item">
-                        <span class="stat-label">Top Brand:</span>
-                        <span class="stat-value">Jack Daniel's</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Market Share:</span>
-                        <span class="stat-value">15.2%</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Total Brands:</span>
-                        <span class="stat-value">1,247</span>
-                    </div> 
-                </div> 
-            </div> 
+            <!-- Analysis Section (commented out as per original file) -->
         </div>
-    </div> -->
+    </div>
+
+    <!-- Tooltip element -->
+    <div id="tooltip"></div>
 
     <script src="js/shared.js"></script>
     <script src="js/brands.js"></script>
